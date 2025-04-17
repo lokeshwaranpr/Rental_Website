@@ -43,7 +43,7 @@ def root():
 def create_item(item : Item):
     cursor.execute("INSERT INTO item (title, description, price) VALUES (%s, %s, %s )", (item.title, item.description, item.price))
     conn.commit()
-    return {"Message":"Successfully Created"}
+    return {"Message":"Successfully Created "}
 
 @app.get("/getposts")
 def get_item():
