@@ -37,7 +37,7 @@ while True:
 
 @app.get("/")
 def root():
-    return {"message":"HelloWorld"}
+    return {"message":"hello world"}
 
 @app.post("/createpost")
 def create_item(item : Item):
