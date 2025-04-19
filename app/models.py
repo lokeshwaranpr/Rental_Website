@@ -1,6 +1,8 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Boolean
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql.expression import text
 from .database import Base, engine
+from sqlalchemy.sql.sqltypes import TIMESTAMP
 
 class Post(Base):
     __tablename__ = "posts"
@@ -14,4 +16,5 @@ class Post(Base):
     condition = Column(String, index=True, nullable=False)
     image_url = Column(String, index=True, nullable=False)
     location = Column(String, index=True, nullable=False)
-    available = Column(String, index=True, default= True)
+    available = Column(Boolean, index=True, server_default='True', default=True)
+    created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))

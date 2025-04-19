@@ -1,15 +1,20 @@
 from typing import Optional
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.params import Body
 from pydantic import BaseModel
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import time
+from . import models
+from .database import engine, SessionLocal, get_db
+from sqlalchemy.orm import Session
 
 
 
+models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
 
 
 class Item(BaseModel):
@@ -22,6 +27,7 @@ class Item(BaseModel):
     image_url: Optional[str] = None
     location: str
     available: bool
+
 while True:
 
     try:
@@ -50,3 +56,7 @@ def get_item():
     cursor.execute("SELECT * FROM item")
     items = cursor.fetchall()
     return {"posts":items}
+
+@app.get("/sqlalchemy")
+def test_posts(db: Session = Depends(get_db)):
+    return {"data": "Success"}
