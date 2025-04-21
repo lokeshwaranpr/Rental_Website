@@ -37,7 +37,7 @@ def root():
 
 
 @app.post("/createpost",status_code=status.HTTP_201_CREATED)
-def create_item(post: schemas.Post, db: Session = Depends(get_db)):
+def create_item(post: schemas.PostCreate, db: Session = Depends(get_db)):
     new_post=models.Post(**post.dict())
     db.add(new_post)
     db.commit()
@@ -69,7 +69,7 @@ def delete_post(id:int, db: Session = Depends(get_db)):
     return {"message":"Post deleted successfully"}
 
 @app.put("/updatepost/{id}")
-def update_post(id:int, post: schemas.Post, db: Session = Depends(get_db)):
+def update_post(id:int, post: schemas.PostCreate, db: Session = Depends(get_db)):
     post_query=db.query(models.Post).filter(models.Post.id==id)
     if not post_query.first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Post not found")
@@ -78,7 +78,3 @@ def update_post(id:int, post: schemas.Post, db: Session = Depends(get_db)):
     return {"message":"Post updated successfully"}
 
 
-@app.get("/sqlalchemy")
-def test_posts(db: Session = Depends(get_db)):
-    posts=db.query(models.Post).all()
-    return {"data": posts}

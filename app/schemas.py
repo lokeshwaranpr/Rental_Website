@@ -2,7 +2,7 @@ from typing import Optional, List
 from pydantic import BaseModel, EmailStr, Field
 
 
-class Post(BaseModel):
+class PostBase(BaseModel):
     title: str
     description: str
     price: float
@@ -11,3 +11,7 @@ class Post(BaseModel):
     condition: str
     image_url: Optional[str] = None
     location: str
+
+class PostCreate(PostBase):
+    pass
+
