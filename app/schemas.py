@@ -1,5 +1,6 @@
 from typing import Optional, List
 from pydantic import BaseModel, EmailStr, Field
+from datetime import datetime
 
 
 class PostBase(BaseModel):
@@ -15,3 +16,10 @@ class PostBase(BaseModel):
 class PostCreate(PostBase):
     pass
 
+class Post(PostBase):
+    id: int
+    available: bool = True
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
