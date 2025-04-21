@@ -6,10 +6,10 @@ from pydantic import BaseModel
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import time
-from . import models,schemas
+from . import models,schemas,utils
 from .database import engine, SessionLocal, get_db
 from sqlalchemy.orm import Session
-
+from passlib.context import CryptContext
 
 
 
@@ -79,3 +79,15 @@ def update_post(id:int, post: schemas.PostCreate, db: Session = Depends(get_db))
     return {"message":"Post updated successfully"}
 
 
+@app.post("/createuser", status_code=status.HTTP_201_CREATED, response_model=schemas.UserOut)
+def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
+    # Hash the password 
+    hashed_password = utils.hash(user.password)
+    user.password = hashed_password
+
+    new_user=models.User(**user.dict())
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+
+    return new_user
