@@ -8,7 +8,7 @@ class PostBase(BaseModel):
     title: str
     description: str
     price: float
-    category: str
+    category: str  
     rental_rate: Optional[float] = None
     condition: str
     image_url: Optional[str] = None
